@@ -1,0 +1,21 @@
+set nobackup       "no backup files, but allows swap files
+set expandtab
+set smartindent
+set number
+set relativenumber
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+filetype on
+filetype plugin on
+filetype indent on
+set nocompatible
+
+set tabstop=2
+set shiftwidth=2
+set expandtab
+
+colo desert
+
+vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
