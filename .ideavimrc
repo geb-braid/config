@@ -1,6 +1,6 @@
 source ~/vimfiles/vimrc
 
-p leader to space ---------------------
+""" set <leader> to <space>
 let mapleader=" "
 
 """ Plugins  --------------------------------
@@ -18,8 +18,8 @@ let g:argtextobj_pairs="[:],(:),<:>"
 
 """ Common settings -------------------------
 set showmode
-set so=5
-set nu
+set scrolloff=5
+set number
 
 """ Idea specific settings ------------------
 set ideajoin
