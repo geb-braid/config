@@ -6,7 +6,7 @@ colorscheme torte
 set noerrorbells
 set novisualbell
 set t_vb=
-set tm=500
+set timeoutlen=500
 
 set cmdheight=1
 set expandtab
@@ -81,5 +81,3 @@ call plug#end()
 " You can revert the settings after the call like so:
 "   filetype indent off   " Disable file-type-specific indentation
 "   syntax off            " Disable syntax highlighting
-"filetype on
-"syntax on
