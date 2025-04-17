@@ -25,7 +25,10 @@ set number
 """ Idea specific settings ------------------
 set ideajoin
 set ideastatusicon=gray
-set idearefactormode=keep
+
+"Via <https://plugins.jetbrains.com/plugin/7234-wrap-to-column> IntelliJ plugin:
+nmap gqq <Action>(com.andrewbrookins.idea.wrap.WrapAction)
+vmap gq <Action>(com.andrewbrookins.idea.wrap.WrapAction)
 
 """ Mappings --------------------------------
 imap jj <Esc>
@@ -44,3 +47,5 @@ map <S-Space> <Action>(GotoNextError)
 
 map <leader>b <Action>(ToggleLineBreakpoint)
 map <leader>o <Action>(FileStructurePopup)
+
+map <Leader>gi <Action>(GotoImplementation)
