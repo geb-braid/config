@@ -58,7 +58,7 @@ fun! CleanExtraSpaces()
 endfun
 
 if has("autocmd")
-  autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee,*.hs,*.md,*.ts :call CleanExtraSpaces()
+  autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee,*.hs,*.md,*.ts,*.java,*.jsp :call CleanExtraSpaces()
 endif
 
 set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
