@@ -12,6 +12,7 @@ set easymotion
 set textobj-entire
 set ReplaceWithRegister
 set highlightedyank
+packadd matchit
 
 """ Plugin settings -------------------------
 let g:argtextobj_pairs="[:],(:),<:>"

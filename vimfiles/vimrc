@@ -41,6 +41,8 @@ let mapleader="\\"
 
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 
+runtime macros/matchit.vim
+
 " remember file last edit position
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
