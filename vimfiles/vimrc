@@ -1,5 +1,6 @@
 set nobackup       "no backup files, but allows swap files
 set nocompatible
+set showmode
 colorscheme torte
 
 " No annoying sound on errors
