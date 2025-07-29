@@ -1,15 +1,16 @@
 @echo off
 
 :choose
-choice /c asdeclxq /m "[A]dd | [S]how | [D]elete | [E]dit | Re-[C]ode | C[l]ear | E[x]cel | [Q]uit"
-if %ERRORLEVEL% EQU 8 goto quit
-if %ERRORLEVEL% EQU 7 goto excel
-if %ERRORLEVEL% EQU 6 goto clear_screen
-if %ERRORLEVEL% EQU 5 goto recode
-if %ERRORLEVEL% EQU 4 goto edit
-if %ERRORLEVEL% EQU 3 goto delete
-if %ERRORLEVEL% EQU 2 goto show
-if %ERRORLEVEL% EQU 1 goto add
+choice /c awsdeclxq /m "[A]dd | [W]akey | [S]how | [D]elete | [E]dit | Re-[C]ode | C[l]ear | E[x]cel | [Q]uit"
+if ERRORLEVEL 9 goto quit
+if ERRORLEVEL 8 goto excel
+if ERRORLEVEL 7 goto clear_screen
+if ERRORLEVEL 6 goto recode
+if ERRORLEVEL 5 goto edit
+if ERRORLEVEL 4 goto delete
+if ERRORLEVEL 3 goto show
+if ERRORLEVEL 2 goto wakey
+if ERRORLEVEL 1 goto add
 goto :choose
 
 :excel
@@ -19,7 +20,26 @@ goto choose
 
 :add
 set /p desc="Event short description: "
-echo %DATE% %TIME%	%desc% >> %USERPROFILE%\events.log
+echo %DATE% %TIME%	%desc%>> %USERPROFILE%\events.log
+set desc=
+goto choose
+
+:wakey
+choice /c sw /m "[S]leep | [W]ake"
+if ERRORLEVEL 2 goto wakey_wake
+if ERRORLEVEL 1 goto wakey_sleep
+goto wakey
+
+:wakey_sleep
+for /f "usebackq delims=" %%i in (`powershell -Command "(Get-WinEvent -ProviderName 'Microsoft-Windows-Kernel-Power' -MaxEvents 30 | where -Property Id -Eq 506 | select -First 1 -Property TimeCreated).TimeCreated.ToString('yyyy-MM-dd HH:mm:ss.ff')"`) do set LAST_SLEEP_TIME=%%i
+echo %LAST_SLEEP_TIME%	break>> %USERPROFILE%\events.log
+set desc=
+goto choose
+
+:wakey_wake
+for /f "usebackq delims=" %%i in (`powershell -Command "(Get-WinEvent -ProviderName 'Microsoft-Windows-Kernel-Power' -MaxEvents 30 | where -Property Id -Eq 507 | select -First 1 -Property TimeCreated).TimeCreated.ToString('yyyy-MM-dd HH:mm:ss.ff')"`) do set LAST_WAKE_TIME=%%i
+set /p desc="Event short description: "
+echo %LAST_WAKE_TIME%	%desc%>> %USERPROFILE%\events.log
 set desc=
 goto choose
 
