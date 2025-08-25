@@ -89,6 +89,8 @@ function! HasPaste()
   return ''
 endfunction
 
+" Install vim-plug, then run :PlugInstall to install plugins.
+" More information: https://github.com/junegunn/vim-plug
 call plug#begin()
 
 Plug 'tpope/vim-repeat'
