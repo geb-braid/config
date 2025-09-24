@@ -1,37 +1,71 @@
+" misc
 set nobackup       "no backup files, but allows swap files
 set nocompatible
-set showmode
-colorscheme torte
+set hidden " closing a buffer keeps it in background
+set history=500
 
 " No annoying sound on errors
 set noerrorbells
-set novisualbell
+set visualbell
 set t_vb=
 set timeoutlen=500
 
-set cmdheight=1
+" line numbers
+set number
+set relativenumber
+set wrap
+
+" indentation
 set expandtab
 set smarttab " some tab/backspace vs indent logic
 set shiftwidth=2
 set tabstop=2
 set autoindent " when moving to next line, indent based on current line
 set smartindent " auto inc/dec indent based on keywords
-set wrap
-set hidden " closing a buffer keeps it in background
-set history=500
-set hlsearch
+
+" whitespace
+set list
+set listchars=tab:▸\ ,eol:¬,trail:·,nbsp:·
+
+" search
 set ignorecase " ... when searching
 set incsearch " highlight search as I type
-set magic " reduces amount of regex quoting
-set number
-set relativenumber
-set ruler " show row,col in status bar
-set scrolloff=7 " # lines to keep as vertical margin
-set showmatch " auto-highlight matching brackets
+set hlsearch
 set smartcase " when searching, if uppercase then won't ignore case
-set wildmenu
+set magic " reduces amount of regex quoting
 set regexpengine=0 " auto-detect Regex engine
+
+" ui
+set wildmenu " builtin auto-complete menu
+set wildignorecase
+"set showmode
+"set ruler " show row,col in status bar (affects ^G)
+set scrolloff=7 " # lines to keep as vertical margin
+set cmdheight=1
+set showmatch " auto-highlight matching brackets
+colorscheme torte
+
+" status line
 set laststatus=2 " always show a status line
+set statusline=
+"set statusline+=%#Icon#
+"set statusline+=\:\)
+set statusline+=\ %{HasPaste()}
+set statusline+=%#Filename#%F
+" modified flag
+set statusline+=%m
+" readonly flag
+set statusline+=%#ReadOnly#\ %r
+" help flag
+set statusline+=%h
+" preview flag
+set statusline+=\ %w
+set statusline+=\ \ CWD:\ %{getcwd()}
+set statusline+=%=
+set statusline+=%#Fileformat#\ %y
+set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
+set statusline+=\ [%{&fileformat}]
+set statusline+=%#Position#\ \ \ Ln:%l\|%c
 
 filetype plugin on
 filetype indent on
@@ -61,26 +95,6 @@ endfun
 if has("autocmd")
   autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee,*.hs,*.md,*.ts,*.java,*.jsp :call CleanExtraSpaces()
 endif
-
-set statusline=
-"set statusline+=%#Icon#
-"set statusline+=\:\)
-set statusline+=\ %{HasPaste()}
-set statusline+=%#Filename#%F
-" modified flag
-set statusline+=%m
-" readonly flag
-set statusline+=%#ReadOnly#\ %r
-" help flag
-set statusline+=%h
-" preview flag
-set statusline+=\ %w
-set statusline+=\ \ CWD:\ %{getcwd()}
-set statusline+=%=
-set statusline+=%#Fileformat#\ %y
-set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
-set statusline+=\ [%{&fileformat}]
-set statusline+=%#Position#\ \ \ Ln:%l\|%c
 
 function! HasPaste()
   if &paste
