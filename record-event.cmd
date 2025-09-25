@@ -16,6 +16,7 @@ goto :choose
 :excel
 type %USERPROFILE%\events.log | clip
 start "unused-window-title" "https://dbotsoftware-my.sharepoint.com/:x:/r/personal/nir_dbotsoftware_com/_layouts/15/Doc.aspx?sourcedoc=%%7B3F8F51F0-B88E-4BEE-B62A-C9B0B1726BAD%%7D&file=Timesheet-Calculator.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&wdOrigin=WAC.EXCEL.HOME-BUTTON%%2CAPPHOME-WEB.JUMPBACKIN&wdPreviousSession=d15560ea-f8bc-4704-9c15-0e022d08b50c&wdPreviousSessionSrc=AppHomeWeb&ct=1753271318068"
+echo Your times were copied to the clipboard. Please paste them into the table.
 goto choose
 
 :add
