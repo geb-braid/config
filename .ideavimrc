@@ -22,11 +22,14 @@ set ideajoin
 set ideastatusicon=gray
 
 "Via <https://plugins.jetbrains.com/plugin/7234-wrap-to-column> IntelliJ plugin:
-nmap gqq <Action>(com.andrewbrookins.idea.wrap.WrapAction)
-vmap gq <Action>(com.andrewbrookins.idea.wrap.WrapAction)
+"note *builtin* normal mode 'gqq' to format code, and visual mode `gq` to wrap text
+"nmap gqq <Action>(com.andrewbrookins.idea.wrap.WrapAction)
+"vmap gq <Action>(com.andrewbrookins.idea.wrap.WrapAction)
 
 """ Mappings --------------------------------
 imap jj <Esc>
+nmap gi <Action>(GotoImplementation)
+
 map <leader>f <Plug>(easymotion-s)
 map <leader>e <Plug>(easymotion-f)
 
@@ -42,5 +45,3 @@ map <S-Space> <Action>(GotoNextError)
 
 map <leader>b <Action>(ToggleLineBreakpoint)
 map <leader>o <Action>(FileStructurePopup)
-
-map <Leader>gi <Action>(GotoImplementation)

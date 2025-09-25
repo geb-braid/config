@@ -43,10 +43,11 @@ set wildignorecase
 set scrolloff=7 " # lines to keep as vertical margin
 set cmdheight=1
 set showmatch " auto-highlight matching brackets
-colorscheme torte
+colorscheme darkblue
 
 " status line
 set laststatus=2 " always show a status line
+set shortmess-=S " include search count
 set statusline=
 "set statusline+=%#Icon#
 "set statusline+=\:\)
@@ -72,7 +73,7 @@ filetype indent on
 
 let mapleader="\\"
 
-:noremap Q !!$SHELL<CR>
+vnoremap Q !!$SHELL<CR>
 
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 
@@ -112,6 +113,7 @@ Plug 'tpope/vim-surround'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'dense-analysis/ale'
+Plug 'tpope/vim-apathy'
 
 " - Automatically executes `filetype plugin indent on` and `syntax enable`.
 call plug#end()
