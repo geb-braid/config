@@ -11,7 +11,7 @@ if ERRORLEVEL 4 goto delete
 if ERRORLEVEL 3 goto show
 if ERRORLEVEL 2 goto wakey
 if ERRORLEVEL 1 goto add
-goto :choose
+goto choose
 
 :excel
 type %USERPROFILE%\events.log | clip
