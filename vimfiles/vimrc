@@ -71,11 +71,14 @@ set statusline+=%#Position#\ \ \ Ln:%l\|%c
 filetype plugin on
 filetype indent on
 
-let mapleader="\\"
+let mapleader=' '
 
+" execute line as shell
 vnoremap Q !!$SHELL<CR>
-
+" search selected text
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
+" dictionary auto-correct
+map <leader>c 1z=
 
 runtime macros/matchit.vim
 
@@ -104,6 +107,8 @@ function! HasPaste()
   return ''
 endfunction
 
+iabbrev shrug ¯\_(ツ)_/¯
+
 " Install vim-plug, then run :PlugInstall to install plugins.
 " More information: https://github.com/junegunn/vim-plug
 call plug#begin()
@@ -114,6 +119,7 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'dense-analysis/ale'
 Plug 'tpope/vim-apathy'
+Plug 'tpope/vim-abolish'
 
 " - Automatically executes `filetype plugin indent on` and `syntax enable`.
 call plug#end()
