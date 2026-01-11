@@ -3,6 +3,12 @@ source ~/vimfiles/vimrc
 """ set <leader> to <space>
 let mapleader=" "
 
+" search
+set ignorecase " ... when searching
+set incsearch " highlight search as I type
+set hlsearch
+set smartcase " when searching, if uppercase then won't ignore case
+
 """ Plugins  --------------------------------
 set surround
 set multiple-cursors

@@ -74,18 +74,21 @@ filetype indent on
 let mapleader=' '
 
 " execute line as shell
-vnoremap Q !!$SHELL<CR>
+vnoremap Q yV!<C-R>"<CR>
 " search selected text
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 " dictionary auto-correct
-map <leader>c 1z=
+nmap <leader>c 1z=
+nmap g<C-F> o<ESC>"%P"+dd
+" toggle code comments
+noremap <leader>/ :Commentary<CR>
 
-runtime macros/matchit.vim
+packadd! matchit
 
 " remember file last edit position
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
-au BufReadCmd *.rar,*.odt,*.ott,*.ods,*.ots,*.odp,*.otp,*.odg,*.otg call zip#Browse(expand("<amatch>"))
+au BufReadCmd *.zip,*.rar,*.odt,*.ott,*.ods,*.ots,*.odp,*.otp,*.odg,*.otg call zip#Browse(expand("<amatch>"))
 
 " Delete trailing white space on save
 fun! CleanExtraSpaces()
@@ -115,6 +118,7 @@ call plug#begin()
 
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'dense-analysis/ale'
