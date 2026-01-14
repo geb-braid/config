@@ -79,7 +79,7 @@ vnoremap Q yV!<C-R>"<CR>
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 " dictionary auto-correct
 nmap <leader>c 1z=
-nmap g<C-F> o<ESC>"%P"+dd
+nmap g<C-F> o<ESC>"%P"+dd3u
 " toggle code comments
 noremap <leader>/ :Commentary<CR>
 
