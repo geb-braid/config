@@ -43,7 +43,6 @@ set wildignorecase
 set scrolloff=7 " # lines to keep as vertical margin
 set cmdheight=1
 set showmatch " auto-highlight matching brackets
-colorscheme darkblue
 
 " status line
 set laststatus=2 " always show a status line
@@ -130,3 +129,9 @@ call plug#end()
 " You can revert the settings after the call like so:
 "   filetype indent off   " Disable file-type-specific indentation
 "   syntax off            " Disable syntax highlighting
+
+let g:highlightedyank_highlight_duration = 200
+set termguicolors
+colorscheme torte
+set cursorline
+highlight CursorLine guibg=#222222
