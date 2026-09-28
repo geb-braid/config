@@ -115,9 +115,8 @@ function Goto-Prog { Set-Location 'C:\Program Files' }
 function Goto-Prog86 { Set-Location 'C:\Program Files (x86)' }
 
 function Ping-Ms {
-  # & 'ping' 'www.microsoft.com'
-  # & 'ping' '23.63.193.222'
-  & 'ping' '184.27.65.11'
+  & 'ping' '-n' '1' '8.8.8.8' >nul || echo 'Ping not working.'
+  & 'ping' '-n' '1' 'www.microsoft.com' >nul || echo 'DNS not working.'
 }
 
 function .. { Set-Location '..' }
