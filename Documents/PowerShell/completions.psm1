@@ -6,12 +6,15 @@ function Enable-KubeCtlCompletions {
   & 'kubectl' 'completion' 'powershell' | Out-String | Invoke-Expression
 }
 function Enable-KubeLoginCompletions {
+  # winget install -e --id Microsoft.Azure.Kubelogin
   & 'kubelogin' 'completion' 'powershell' | Out-String | Invoke-Expression
 }
 function Enable-BatCompletions {
+  # winget install -e --id sharkdp.bat
   & 'bat' '--completion' 'ps1' | Out-String | Invoke-Expression
 }
 function Enable-FdCompletions {
+  # winget install -e --id sharkdp.fd
   & 'fd' '--gen-completions' | Out-String | Invoke-Expression
 }
 function Enable-NpmCompletions {
@@ -19,6 +22,10 @@ function Enable-NpmCompletions {
   # for powershell use:
   # Install-Module npm-completion -Scope CurrentUser # first time only
   Import-Module npm-completion # maybe not needed
+}
+function Enable-RgCompletions {
+  # winget install -e --id BurntSushi.ripgrep.MSVC
+  & 'rg' '--generate=complete-powershell' | Out-String | Invoke-Expression
 }
 
 Set-Alias -Name 'docker-complete' -Value 'Enable-DockerCompletions'
