@@ -41,6 +41,8 @@ $global:GitPromptSettings.DefaultPromptBeforeSuffix.Text = '$(PromptWriteErrorIn
 # $global:GitPromptSettings.DefaultPromptBeforeSuffix.Text = '`n$(PromptWriteErrorInfo)$([DateTime]::now.ToString("MM-dd HH:mm:ss"))'
 
 function ll { Get-ChildItem -Directory }
+function l. { Get-ChildItem -Force .* }
+function ll. { Get-ChildItem -Directory -Force .* }
 
 function enc {
   param([EncodingType]$Encoding)
@@ -108,16 +110,20 @@ function squeeze {
 }
 
 function Get-Tips { & 'bat' '-p' 'C:\Users\maozn\Documents\tips.md' }
-function Goto-Legacy { Set-Location 'C:\Users\maozn\Documents\Work\rapid-data\funeral-erp-legacy-api' }
-function Goto-Next { Set-Location 'C:\Users\maozn\Documents\Work\rapid-data\funeral-erp-core-api' }
-function Goto-UI { Set-Location 'C:\Users\maozn\Documents\Work\rapid-data\funeral-erp-core-ui' }
-function Goto-Nir { Set-Location 'C:\Users\maozn\Documents\Work\nir' }
+
+function Goto-Prog { Set-Location 'C:\Program Files' }
+function Goto-Prog86 { Set-Location 'C:\Program Files (x86)' }
 
 function Ping-Ms {
   # & 'ping' 'www.microsoft.com'
   # & 'ping' '23.63.193.222'
   & 'ping' '184.27.65.11'
 }
+
+function .. { Set-Location '..' }
+function ... { Set-Location '..\..' }
+function .... { Set-Location '..\..\..' }
+function ..... { Set-Location '..\..\..\..' }
 
 function Show-Tree {
   (& "tree.com" "/a" $args) -replace '\|','│' -replace '\+','├' -replace '-','─' -replace '\\','└'
@@ -150,10 +156,8 @@ Set-Alias -Name 'fix' -Value '~/fix.ps1'
 Set-Alias -Name 'rec' -Value '~/record-event.cmd'
 Set-Alias -Name 'repl' -Value 'Vim-Repl'
 
-Set-Alias -Name 'nir' -Value 'Goto-Nir'
-Set-Alias -Name 'legacy' -Value 'Goto-Legacy'
-Set-Alias -Name 'next' -Value 'Goto-Next'
-Set-Alias -Name 'ui' -Value 'Goto-UI'
+Set-Alias -Name 'prog' -Value 'Goto-Prog'
+Set-Alias -Name 'prog86' -Value 'Goto-Prog86'
 
 $env:Path += ';'
 $env:Path += 'C:\Program Files (x86)\GnuWin32\bin;'
