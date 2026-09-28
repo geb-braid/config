@@ -1,14 +1,7 @@
 ﻿# TODO use `-Stream` for `echo` or `Out-String` (also in other scripts)
 # Write-Host "Microsoft PowerShell" $PSVersionTable.PSVersion # PS7 already does this
 
-# Install-Module DockerCompletion -Scope CurrentUser # first time only
-# Import-Module DockerCompletion
-# kubectl completion powershell | Out-String | Invoke-Expression
-# kubelogin completion powershell | Out-String | Invoke-Expression
-# bat --completion ps1 | Out-String | Invoke-Expression
-# npm completion # not for Pwsh; Can instead use:
-#   Install-Module npm-completion -Scope CurrentUser # first time only
-#   Import-Module npm-completion # maybe not needed
+Import-Module -Name "$PSScriptRoot\completions.psm1" -Force
 
 # Install-Module powershell-yaml -Scope CurrentUser # first time only
 # Import-Module powershell-yaml
@@ -30,6 +23,8 @@ Import-Module git-aliases -DisableNameChecking
 # ensure it is executed before Import-Module posh-git, and g checkout will
 # complete as if you'd typed git.
 Import-Module posh-git
+
+Import-Module posh-git-alias-completion
 
 function ll { Get-ChildItem -Directory }
 
