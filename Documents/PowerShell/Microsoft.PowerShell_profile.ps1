@@ -26,6 +26,20 @@ Import-Module posh-git
 
 Import-Module posh-git-alias-completion
 
+# in case of errors: show red `!` for pwsh errors, or program exit code
+function global:PromptWriteErrorInfo() {
+  if ($global:GitPromptValues.DollarQuestion) { return }
+
+  if ($global:GitPromptValues.LastExitCode) {
+    "`n`e[31m(" + $global:GitPromptValues.LastExitCode + ") `e[0m"
+  }
+  else {
+    "`n`e[31m! `e[0m"
+  }
+}
+$global:GitPromptSettings.DefaultPromptBeforeSuffix.Text = '$(PromptWriteErrorInfo)'
+# $global:GitPromptSettings.DefaultPromptBeforeSuffix.Text = '`n$(PromptWriteErrorInfo)$([DateTime]::now.ToString("MM-dd HH:mm:ss"))'
+
 function ll { Get-ChildItem -Directory }
 
 function enc {
