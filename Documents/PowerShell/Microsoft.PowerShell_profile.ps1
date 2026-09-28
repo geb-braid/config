@@ -138,8 +138,56 @@ function Start-MultiFzf {
   }
 }
 
-function Vim-Repl { & '~/Documents/Work/nir/vim-repl/vim-repl.ps1' }
+function Fetch-Man {
+  param(
+    [Parameter(Position=0)] [string]$Section='all', # should be empty or digit
+    [Parameter(Position=1)] [string]$Topic = 'man'
+  )
+  $res = Invoke-WebRequest 'https://man.he.net/' -Method Post -Body @{ topic = $Topic; section = $Section }
+  $res.Content -split '\r?\n' |
+    & 'sed' '-ne' '/<PRE>/,/<\/PRE>/ { /<PRE>/ { n; b; }; p }'
+}
 
+function Format-Man {
+  [CmdletBinding()]
+  param([Parameter(ValueFromPipeline)][string]$Line)
+  begin {
+    $psi = [System.Diagnostics.ProcessStartInfo]::new('bat', '-Snl man')
+    $psi.RedirectStandardInput = $true
+    $psi.UseShellExecute = $false
+    $proc = [System.Diagnostics.Process]::Start($psi)
+    $brokenPipe = $false # latch so we can skip remaining processing lines
+  }
+  process {
+    if ($brokenPipe -or $proc.HasExited) { $brokenPipe = $true; return }
+    try { $proc.StandardInput.WriteLine($Line) } catch { $brokenPipe = $true }
+  }
+  end {
+    try { $proc.StandardInput.Close() } catch { $brokenPipe = $true } # throws too, if already broken
+    if ($brokenPipe) {
+      Write-Verbose 'pipe broke'
+    }
+    $proc.WaitForExit()
+  }
+}
+
+# NOTE: keep this a *simple* function (no [Parameter()]/[CmdletBinding()]),
+# otherwise $input / $MyInvocation.ExpectingInput don't work
+function Run-Man {
+  param(
+    [string]$Topic = 'man',
+    [string]$Section='all' # should be empty or digit
+  )
+
+  if ($MyInvocation.ExpectingInput) {
+    $input | Format-Man
+  } else {
+    Fetch-Man -Section $Section -Topic $Topic | Format-Man
+  }
+}
+
+# Shortcuts
+Set-Alias -Name 'man' -Value 'Run-Man'
 Set-Alias -Name 'l' -Value 'Get-ChildItem'
 Set-Alias -Name 'clip' -Value 'Set-Clipboard'
 Set-Alias -Name 'celar' -Value 'Clear-Host'
