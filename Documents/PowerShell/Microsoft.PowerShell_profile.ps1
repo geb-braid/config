@@ -216,7 +216,7 @@ $env:Path += 'C:\Program Files\Git\usr\bin;'
 # # see `~/.docker/windows-daemon.json`
 # $env:DOCKER_HOST='tcp://0.0.0.0:2375'
 
-Set-Variable EDITOR 'C:\Program Files\Git\usr\bin\vim.exe'
+$env:EDITOR = "'C:\Program Files\Vim\vim.exe'"
 
 Set-PSReadlineOption -EditMode vi
 Set-PSReadLineOption -ViModeIndicator Prompt
