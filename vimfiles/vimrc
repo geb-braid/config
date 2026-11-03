@@ -100,10 +100,12 @@ fun! CleanExtraSpaces()
 endfun
 
 if has("autocmd")
-  autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee,*.hs,*.md,*.ts,*.java,*.jsp :call CleanExtraSpaces()
+  autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee,*.hs,*.md,*.ts,*.java,*.jsp,*.cs :call CleanExtraSpaces()
 
   " remember file last edit position
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+  autocmd BufReadPost *.log set filetype=log
 
   " syntax based auto complete (^X^O)
   if exists("+omnifunc")
