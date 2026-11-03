@@ -5,7 +5,9 @@ set hidden " closing a buffer keeps it in background
 set history=500
 "see: 'runtimepath' under spell/ (e.g. 'c:\Program Files\Vim\runtime\spell\en.utf-8.spl')
 set complete+=kspell "include dictionary complete
-set complete+=F "include completefunc
+if exists("+eval")
+  set complete+=F "include completefunc
+endif
 
 " No annoying sound on errors
 set noerrorbells
