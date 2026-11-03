@@ -3,6 +3,9 @@ set nobackup       "no backup files, but allows swap files
 set nocompatible
 set hidden " closing a buffer keeps it in background
 set history=500
+"see: 'runtimepath' under spell/ (e.g. 'c:\Program Files\Vim\runtime\spell\en.utf-8.spl')
+set complete+=kspell "include dictionary complete
+set complete+=F "include completefunc
 
 " No annoying sound on errors
 set noerrorbells
@@ -100,6 +103,14 @@ endfun
 
 if has("autocmd")
   autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee,*.hs,*.md,*.ts,*.java,*.jsp :call CleanExtraSpaces()
+
+  " syntax based auto complete (^X^O)
+  if exists("+omnifunc")
+    autocmd Filetype *
+            \	if &omnifunc == "" |
+            \		setlocal omnifunc=syntaxcomplete#Complete |
+            \	endif
+  endif
 endif
 
 function! HasPaste()
