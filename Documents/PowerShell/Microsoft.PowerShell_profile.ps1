@@ -223,4 +223,8 @@ $env:EDITOR = "'C:\Program Files\Vim\vim.exe'"
 
 Set-PSReadlineOption -EditMode vi
 Set-PSReadLineOption -ViModeIndicator Prompt
+
+$PSDefaultParameterValues['Out-Default:OutVariable'] = 'res' # global, also affects within scripts!
+$PSDefaultParameterValues.Disabled = $false
+
 # Set-PSReadLineOption -ViModeIndicator Cursor
