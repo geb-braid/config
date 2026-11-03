@@ -177,6 +177,31 @@ endif
 
 " Fix "goto file" (gf) in some projects
 if has("autocmd")
+  fun! IncludeExpr_ts_babel()
+    " see './tsconfig.json' -> 'compilerOptions' -> 'paths'
+    " see './babel.config.js' & './jest.config.js'
+    if v:fname =~? '^@config\/'
+      return substitute(v:fname, '^@config\/', './src/config/', 'g')
+    elseif v:fname =~? '^@core\/'
+      return substitute(v:fname, '^@core\/', './src/core/', 'g')
+    elseif v:fname =~? '^@features\/'
+      return substitute(v:fname, '^@features\/', './src/features/', 'g')
+    elseif v:fname =~? '^@shared\/'
+      return substitute(v:fname, '^@shared\/', './src/shared/', 'g')
+    elseif v:fname =~? '^@store\/'
+      return substitute(v:fname, '^@store\/', './src/store/', 'g')
+    elseif v:fname =~? '^@utils\/'
+      return substitute(v:fname, '^@utils\/', './src/utils/', 'g')
+    elseif v:fname =~? '^@test\/'
+      return substitute(v:fname, '^@test\/', './test/', 'g')
+    endif
+    return v:fname
+  endfun
+  autocmd FileType javascript,javascriptreact,typescript,typescriptreact
+    \ if expand('%:p') =~? 'some-ts-project'
+    \ | setlocal includeexpr=IncludeExpr_ts_babel()
+    \ | endif
+
   fun! IncludeExpr_Java(prj)
     let attempted = v:fname
     if filereadable(attempted)
