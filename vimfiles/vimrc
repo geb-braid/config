@@ -135,14 +135,45 @@ Plug 'tpope/vim-commentary'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'dense-analysis/ale'
+Plug 'OmniSharp/omnisharp-vim'
 Plug 'tpope/vim-apathy'
 Plug 'tpope/vim-abolish'
+Plug 'bam9523/vim-decompile'          " class file decompiler
+Plug 'powerman/vim-plugin-AnsiEsc'    " unescape terminal codes
+Plug 'machakann/vim-highlightedyank'
+Plug 'AndrewRadev/linediff.vim'
+Plug 'machakann/vim-swap'             " swap around filetype delimiter
 
 " - Automatically executes `filetype plugin indent on` and `syntax enable`.
 call plug#end()
 " You can revert the settings after the call like so:
 "   filetype indent off   " Disable file-type-specific indentation
 "   syntax off            " Disable syntax highlighting
+
+" Setup ALE integration with OmniSharp
+let g:OmniSharp_want_snippet = 1
+let g:OmniSharp_compatibility_with_ale = 1
+let g:OmniSharp_server_use_net6 = 1
+let g:ale_lsp_suggestions = 1
+
+" Explicitly tell ALE to use omnisharp for C# files
+let g:ale_linters = {
+\   'cs': ['omnisharp'],
+\}
+
+if has("autocmd")
+  autocmd Filetype cs nnoremap <buffer> <leader>r :OmniSharpRename<CR> |
+        \ nnoremap <buffer> gd :OmniSharpGotoDefinition<CR> |
+        \ nnoremap <buffer> gi :OmniSharpFindImplementations<CR> |
+        \ nnoremap <buffer> K :OmniSharpDocumentation<CR>
+
+  autocmd Filetype javascript,javascriptreact,typescript,typescriptreact
+        \ nnoremap <buffer> <leader>r :ALERename<CR> |
+        \ nnoremap <buffer> gd :ALEGoToDefinition<CR> |
+        \ nnoremap <buffer> gi :ALEGoToImplementation<CR> |
+        \ nnoremap <buffer> gK :ALEHover<CR> |
+        \ nnoremap <buffer> K :ALEDocumentation<CR>
+endif
 
 let g:highlightedyank_highlight_duration = 200
 set termguicolors
