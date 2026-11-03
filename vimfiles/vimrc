@@ -1,3 +1,6 @@
+"PowerShell's vim.exe
+"For MINGW bash, see "C:\Program Files\Git\etc\vimrc".
+
 " misc
 set nobackup       "no backup files, but allows swap files
 set nocompatible
@@ -72,6 +75,8 @@ set statusline+=%#Position#\ \ \ Ln:%l\|%c
 
 filetype plugin on
 filetype indent on
+
+command! Terminal terminal ++close pwsh.exe
 
 let mapleader=' '
 
@@ -198,7 +203,7 @@ if has("autocmd")
     return v:fname
   endfun
   autocmd FileType javascript,javascriptreact,typescript,typescriptreact
-    \ if expand('%:p') =~? 'some-ts-project'
+    \ if expand('%:p') =~? 'funeral-erp-core-ui'
     \ | setlocal includeexpr=IncludeExpr_ts_babel()
     \ | endif
 
@@ -216,6 +221,10 @@ if has("autocmd")
       if len(matches) > 1
         let filepath = substitute(matches[1], '\.', '/', 'g') . '.java'
         if a:prj == 'some-java-project-name'
+          let attempted = './src/main/java/' . filepath
+        elseif a:prj == 'legacy'
+          let attempted = './src/' . filepath
+        elseif a:prj == 'next'
           let attempted = './src/main/java/' . filepath
         else
           let attempted = './' . filepath
@@ -236,6 +245,10 @@ if has("autocmd")
   autocmd FileType java
     \ if expand('%:p') =~? 'some-java-project'
     \ | let prj='some-java-project-name'
+    \ | elseif expand('%:p') =~? 'funeral-erp-core-api'
+    \ | let prj='next'
+    \ | elseif expand('%:p') =~? 'funeral-erp-legacy-api'
+    \ | let prj='legacy'
     \ | else
     \ | let prj=''
     \ | endif

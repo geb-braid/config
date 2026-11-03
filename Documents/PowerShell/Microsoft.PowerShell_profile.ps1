@@ -2,6 +2,7 @@
 # Write-Host "Microsoft PowerShell" $PSVersionTable.PSVersion # PS7 already does this
 
 Import-Module -Name "$PSScriptRoot\completions.psm1" -Force
+Import-Module -Name "$PSScriptRoot\prs.psm1" -Force
 
 # Install-Module powershell-yaml -Scope CurrentUser # first time only
 # Import-Module powershell-yaml
@@ -59,6 +60,46 @@ function enc {
   }
 }
 
+# Undo console state left behind by a native app that died without cleaning up
+# (e.g. `less` killed by a broken pipe). The stuck flag is usually
+# ENABLE_VIRTUAL_TERMINAL_INPUT, which makes conhost pass raw VT bytes instead of
+# key events -> vim loses arrows/pgup/home, PSReadLine loses Ctrl+Backspace.
+# Console mode is per-conhost, so it survives `pwsh -NoProfile` in the same tab.
+function Reset-ConsoleMode {
+  [CmdletBinding()]
+  param()
+
+  if (-not ('W32.ConsoleMode' -as [type])) {
+    Add-Type -Name 'ConsoleMode' -Namespace 'W32' -MemberDefinition @'
+[DllImport("kernel32", SetLastError=true)] public static extern IntPtr GetStdHandle(int n);
+[DllImport("kernel32", SetLastError=true)] public static extern bool GetConsoleMode(IntPtr h, out uint m);
+[DllImport("kernel32", SetLastError=true)] public static extern bool SetConsoleMode(IntPtr h, uint m);
+'@
+  }
+  $api = [W32.ConsoleMode]
+
+  # input: drop ENABLE_VIRTUAL_TERMINAL_INPUT (0x200), keep ENABLE_PROCESSED_INPUT (0x1) so Ctrl+C works
+  # output: ensure PROCESSED (0x1) | WRAP_AT_EOL (0x2) | VIRTUAL_TERMINAL_PROCESSING (0x4),
+  #         drop DISABLE_NEWLINE_AUTO_RETURN (0x8)
+  foreach ($h in @(
+    @{ Name = 'stdin' ; Id = -10; And = 0xFFFFFDFF; Or = 0x001 }
+    @{ Name = 'stdout'; Id = -11; And = 0xFFFFFFF7; Or = 0x007 }
+  )) {
+    $handle = $api::GetStdHandle($h.Id)
+    $mode = 0
+    if (-not $api::GetConsoleMode($handle, [ref]$mode)) {
+      Write-Verbose "$($h.Name): not a console handle (redirected?), skipped"
+      continue
+    }
+    $new = ($mode -band $h.And) -bor $h.Or
+    [void]$api::SetConsoleMode($handle, $new)
+    Write-Verbose ("{0}: 0x{1:X} -> 0x{2:X}" -f $h.Name, $mode, $new)
+  }
+
+  # terminal side: leave alt screen, show cursor, autowrap on, mouse reporting off, reset SGR
+  [Console]::Write("`e[?1049l`e[?25h`e[?7h`e[?1000l`e[?1002l`e[?1003l`e[?1006l`e[0m")
+}
+
 function Get-GitIncomingChanges {
   $CurrentBranch = Get-Git-CurrentBranch
   & 'git' 'log' '--stat' "$CurrentBranch..origin/$CurrentBranch"
@@ -104,6 +145,8 @@ filter grep {
 # This works like `xargs -n1`
 filter xargs-n1 { ($h,$t) = $args; & $h ($t + $_) }
 
+function nvm-use { & 'nvm' 'use' (Get-Content '.nvmrc') }
+
 function squeeze {
   $input | & 'tr' '--squeeze-repeats' '[:space:]' @args
   # awk s/\s+//g $0
@@ -113,6 +156,17 @@ function Get-Tips { & 'bat' '-p' 'C:\Users\maozn\Documents\tips.md' }
 
 function Goto-Prog { Set-Location 'C:\Program Files' }
 function Goto-Prog86 { Set-Location 'C:\Program Files (x86)' }
+function Goto-DBot { Set-Location 'C:\Users\maozn\Documents\Work\dbot' }
+function Goto-Rapid { Set-Location 'C:\Users\maozn\Documents\Work\rapid-data' }
+function Goto-Nir { Set-Location 'C:\Users\maozn\Documents\Work\nir' }
+function Goto-MoveBE { Set-Location 'C:\dev\PO-Move' }
+function Goto-MoveApp { Set-Location 'C:\dev\PO-Move-App' }
+function Goto-FuneralApp { Set-Location 'C:\dev\funeral-next-app' }
+function Goto-Legacy { Set-Location 'C:\Dev\erp\funeral-erp-legacy-api' }
+function Goto-Next { Set-Location 'C:\Dev\erp\funeral-erp-core-api' }
+function Goto-UI { Set-Location 'C:\Dev\erp\funeral-erp-core-ui' }
+
+function Start-OPPO { & 'C:\Users\maozn\AppData\Local\Android\Sdk\emulator\emulator.exe' '-avd' 'OPPO' }
 
 function Ping-Ms {
   & 'ping' '-n' '1' '8.8.8.8' >nul || echo 'Ping not working.'
@@ -201,19 +255,33 @@ Set-Alias -Name 'tips' -Value 'Get-Tips'
 Set-Alias -Name 'tree' -Value 'Show-Tree'
 Set-Alias -Name 'ms' -Value 'Ping-Ms'
 Set-Alias -Name 'source' -Value 'Restart-Pwsh'
+Set-Alias -Name 'fixterm' -Value 'Reset-ConsoleMode'
 
+# Custom Scripts
+Set-Alias -Name 'hud' -Value '~/Documents/Work/rapid-data/scripts/hud.ps1'
 Set-Alias -Name 'fix' -Value '~/fix.ps1'
 Set-Alias -Name 'rec' -Value '~/record-event.cmd'
-Set-Alias -Name 'repl' -Value 'Vim-Repl'
+Set-Alias -Name 'repl' -Value '~/Documents/Work/nir/vim-repl/vim-repl.ps1'
 
 Set-Alias -Name 'prog' -Value 'Goto-Prog'
 Set-Alias -Name 'prog86' -Value 'Goto-Prog86'
+Set-Alias -Name 'dbot' -Value 'Goto-DBot'
+Set-Alias -Name 'rapid' -Value 'Goto-Rapid'
+Set-Alias -Name 'nir' -Value 'Goto-Nir'
+Set-Alias -Name 'legacy' -Value 'Goto-Legacy'
+Set-Alias -Name 'next' -Value 'Goto-Next'
+Set-Alias -Name 'ui' -Value 'Goto-UI'
+Set-Alias -Name 'mobe' -Value 'Goto-MoveBE'
+Set-Alias -Name 'mofe' -Value 'Goto-MoveApp'
+Set-Alias -Name 'app' -Value 'Goto-FuneralApp'
 
 $env:Path += ';'
+$env:Path += 'C:\Program Files (x86)\GnuWin32\bin;' # has make.exe
 $env:Path += 'C:\Program Files\Vim;' # before git
 $env:Path += 'C:\Program Files\Git\bin;' # before 'usr/bin'
 $env:Path += 'C:\Users\maozn\.local\bin;'
 $env:Path += 'C:\Program Files\Git\usr\bin;'
+$env:Path += 'C:\Users\maozn\AppData\Local\Android\Sdk\platform-tools;' # mainly for adb.exe
 
 # commented this out, because now using Docker Desktop app for Windows
 # # see `~/.docker/windows-daemon.json`
@@ -228,3 +296,12 @@ $PSDefaultParameterValues['Out-Default:OutVariable'] = 'res' # global, also affe
 $PSDefaultParameterValues.Disabled = $false
 
 # Set-PSReadLineOption -ViModeIndicator Cursor
+#
+# . "$PSScriptRoot\UnixCommands.ps1"
+# - Conflicting PS aliases (ls/cat/rm/cp/mv/echo/pwd/kill/ps/sort/tee/diff/clear/mkdir/rmdir) are removed before wrapping
+# - ssh/scp will use Git's, not Windows OpenSSH — change order or drop them if you prefer the native ones.
+
+# Unresolved:
+# - want set/history/man overridden too? (left as PS)
+# - prefer native Windows ssh/scp/tar/whoami over Git's?
+# - keep PS aliases for kill/ps/sort/tee (more idiomatic in PS pipelines)?
