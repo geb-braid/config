@@ -186,6 +186,10 @@ function Run-Man {
   }
 }
 
+# PATH priorities
+Set-Alias -Name 'bash' -Value 'C:/Program Files/Git/bin/bash.exe'
+Set-Alias -Name 'fzf' -Value '~/vimfiles/plugged/fzf/bin/fzf.exe'
+
 # Shortcuts
 Set-Alias -Name 'man' -Value 'Run-Man'
 Set-Alias -Name 'l' -Value 'Get-ChildItem'
@@ -197,7 +201,6 @@ Set-Alias -Name 'tips' -Value 'Get-Tips'
 Set-Alias -Name 'tree' -Value 'Show-Tree'
 Set-Alias -Name 'ms' -Value 'Ping-Ms'
 Set-Alias -Name 'source' -Value 'Restart-Pwsh'
-Set-Alias -Name 'bash' -Value 'C:\Program Files\Git\usr\bin\bash.exe'
 
 Set-Alias -Name 'fix' -Value '~/fix.ps1'
 Set-Alias -Name 'rec' -Value '~/record-event.cmd'
@@ -207,8 +210,8 @@ Set-Alias -Name 'prog' -Value 'Goto-Prog'
 Set-Alias -Name 'prog86' -Value 'Goto-Prog86'
 
 $env:Path += ';'
-$env:Path += 'C:\Program Files (x86)\GnuWin32\bin;'
-$env:Path += 'C:\Program Files\Git\bin;'
+$env:Path += 'C:\Program Files\Vim;' # before git
+$env:Path += 'C:\Program Files\Git\bin;' # before 'usr/bin'
 $env:Path += 'C:\Users\maozn\.local\bin;'
 $env:Path += 'C:\Program Files\Git\usr\bin;'
 
