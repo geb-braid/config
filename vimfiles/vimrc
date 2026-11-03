@@ -175,6 +175,48 @@ if has("autocmd")
         \ nnoremap <buffer> K :ALEDocumentation<CR>
 endif
 
+" Fix "goto file" (gf) in some projects
+if has("autocmd")
+  fun! IncludeExpr_Java(prj)
+    let attempted = v:fname
+    if filereadable(attempted)
+      return attempted
+    endif
+    " `Type.MEMBER` / `Outer.Inner` -> `Type` / `Outer`; leave `pkg.Type` as-is
+    let type_name = v:fname =~# '^\u' ? matchstr(v:fname, '^\w\+') : v:fname
+    let pattern = '^import\s\+\(\%\(\w\+\.\)*' . escape(type_name, '.') . '\)\s*;$'
+    let match = search(pattern, 'zncbW')
+    if match > 0
+      let matches = matchlist(getline(match), pattern)
+      if len(matches) > 1
+        let filepath = substitute(matches[1], '\.', '/', 'g') . '.java'
+        if a:prj == 'some-java-project-name'
+          let attempted = './src/main/java/' . filepath
+        else
+          let attempted = './' . filepath
+        endif
+      else
+        " no import -> maybe same package
+        let attempted = expand('%:h') . '/' . type_name . '.java'
+      endif
+    else
+      " no import -> maybe same package
+      let attempted = expand('%:h') . '/' . type_name . '.java'
+    endif
+    if filereadable(attempted)
+      return attempted
+    endif
+    return v:fname
+  endfun
+  autocmd FileType java
+    \ if expand('%:p') =~? 'some-java-project'
+    \ | let prj='some-java-project-name'
+    \ | else
+    \ | let prj=''
+    \ | endif
+    \ | let &l:includeexpr= 'IncludeExpr_Java(' . string(prj) . ')'
+endif " has("autocmd")
+
 let g:highlightedyank_highlight_duration = 200
 set termguicolors
 colorscheme torte
