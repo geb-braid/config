@@ -2,3 +2,8 @@
 !vimrc
 !.gitignore
 !record-event.cmd
+!Documents
+Documents/*
+!Documents/PowerShell
+Documents/PowerShell/*
+!Documents/PowerShell/Microsoft.PowerShell_profile.ps1
